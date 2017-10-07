@@ -58,4 +58,12 @@ public interface DetailedReportCategory {
       return this.detail(key, t);
     }
   }
+
+  /**
+   * Gets the report.
+   *
+   * @return the report
+   */
+  @Nonnull
+  DetailedReport then();
 }

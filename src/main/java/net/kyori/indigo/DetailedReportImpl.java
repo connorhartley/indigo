@@ -110,7 +110,7 @@ final class DetailedReportImpl implements DetailedReport {
     }
   }
 
-  private static final class DetailedReportCategoryImpl implements DetailedReportCategory {
+  private final class DetailedReportCategoryImpl implements DetailedReportCategory {
 
     private final String name;
     private final List<Entry> entries = new ArrayList<>();
@@ -126,6 +126,12 @@ final class DetailedReportImpl implements DetailedReport {
       return this;
     }
 
+    @Nonnull
+    @Override
+    public DetailedReport then() {
+      return DetailedReportImpl.this;
+    }
+
     JsonObject write() {
       final JsonObject object = new JsonObject();
       for(final Entry entry : this.entries) {
@@ -138,7 +144,7 @@ final class DetailedReportImpl implements DetailedReport {
       return object;
     }
 
-    private static final class Entry {
+    private final class Entry {
 
       private final String key;
       private final Object value;
