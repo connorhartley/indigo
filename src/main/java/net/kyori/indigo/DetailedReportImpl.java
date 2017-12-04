@@ -75,7 +75,7 @@ final class DetailedReportImpl implements DetailedReport {
 
   @Nonnull
   @Override
-  public String toString() {
+  public JsonObject toJson() {
     final JsonObject object = new JsonObject();
     object.addProperty("instant", Instant.now().toString());
     object.addProperty("message", this.message);
@@ -85,6 +85,13 @@ final class DetailedReportImpl implements DetailedReport {
     final JsonObject details = new JsonObject();
     this.appendCategories(details);
     object.add("details", details);
+    return object;
+  }
+
+  @Nonnull
+  @Override
+  public String toString() {
+    final JsonObject object = this.toJson();
     return GSON.toJson(object);
   }
 

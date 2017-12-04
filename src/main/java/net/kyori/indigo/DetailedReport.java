@@ -23,6 +23,8 @@
  */
 package net.kyori.indigo;
 
+import com.google.gson.JsonObject;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -89,6 +91,14 @@ public interface DetailedReport {
    * Throws an {@link DetailedReportedException}.
    */
   void raise();
+
+  /**
+   * Gets a JSON representation of this report.
+   *
+   * @return the json object
+   */
+  @Nonnull
+  JsonObject toJson();
 
   /**
    * Gets a string representation of this report.
