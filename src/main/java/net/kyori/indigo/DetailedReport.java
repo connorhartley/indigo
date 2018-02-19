@@ -32,7 +32,6 @@ import javax.annotation.Nullable;
  * A friendly report.
  */
 public interface DetailedReport {
-
   /**
    * Creates a new friendly report.
    *

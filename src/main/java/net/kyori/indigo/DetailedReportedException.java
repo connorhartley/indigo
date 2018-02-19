@@ -30,7 +30,6 @@ import javax.annotation.Nullable;
  * An exception thrown with a detailed report.
  */
 public class DetailedReportedException extends RuntimeException {
-
   /**
    * The report.
    */

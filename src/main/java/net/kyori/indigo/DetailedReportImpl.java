@@ -34,12 +34,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 final class DetailedReportImpl implements DetailedReport {
-
   private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
   private final String message;
   @Nullable private final Throwable throwable;
@@ -118,7 +118,6 @@ final class DetailedReportImpl implements DetailedReport {
   }
 
   private final class DetailedReportCategoryImpl implements DetailedReportCategory {
-
     private final String name;
     private final List<Entry> entries = new ArrayList<>();
 
@@ -129,7 +128,14 @@ final class DetailedReportImpl implements DetailedReport {
     @Nonnull
     @Override
     public DetailedReportCategory detail(@Nonnull final String key, @Nullable final Object value) {
-      this.entries.add(new Entry(key, value));
+      this.entries.add(new NormalEntry(key, value));
+      return this;
+    }
+
+    @Nonnull
+    @Override
+    public DetailedReportCategory complexDetail(@Nonnull final String key, @Nonnull final Consumer<DetailedReportCategory> consumer) {
+      this.entries.add(new ConsumerEntry(key, consumer));
       return this;
     }
 
@@ -142,22 +148,37 @@ final class DetailedReportImpl implements DetailedReport {
     JsonObject write() {
       final JsonObject object = new JsonObject();
       for(final Entry entry : this.entries) {
-        if (entry.value instanceof JsonElement) {
-          object.add(entry.key, (JsonElement) entry.value);
+        if(entry instanceof ConsumerEntry) {
+          final DetailedReportCategoryImpl category = new DetailedReportCategoryImpl(entry.key);
+          ((Consumer<DetailedReportCategory>) entry.value()).accept(category);
+          object.add(entry.key, category.write());
         } else {
-          object.addProperty(entry.key, String.valueOf(entry.value));
+          final Object value = entry.value();
+          if(value instanceof JsonElement) {
+            object.add(entry.key, (JsonElement) value);
+          } else {
+            object.addProperty(entry.key, String.valueOf(value));
+          }
         }
       }
       return object;
     }
 
-    private final class Entry {
-
+    private abstract class Entry {
       private final String key;
+
+      Entry(final String key) {
+        this.key = key;
+      }
+
+      abstract Object value();
+    }
+
+    private class NormalEntry extends Entry {
       private final Object value;
 
-      Entry(final String key, @Nullable final Object value) {
-        this.key = key;
+      NormalEntry(final String key, @Nullable final Object value) {
+        super(key);
 
         // Get the string representation of the value now, as the object may change when actually outputting
         if(value == null) {
@@ -167,6 +188,25 @@ final class DetailedReportImpl implements DetailedReport {
         } else {
           this.value = value.toString();
         }
+      }
+
+      @Override
+      Object value() {
+        return this.value;
+      }
+    }
+
+    private final class ConsumerEntry extends Entry {
+      private final Consumer<DetailedReportCategory> consumer;
+
+      ConsumerEntry(final String key, @Nonnull final Consumer<DetailedReportCategory> consumer) {
+        super(key);
+        this.consumer = consumer;
+      }
+
+      @Override
+      Object value() {
+        return this.consumer;
       }
     }
   }

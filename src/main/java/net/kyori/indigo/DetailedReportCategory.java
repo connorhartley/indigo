@@ -24,6 +24,7 @@
 package net.kyori.indigo;
 
 import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,7 +33,6 @@ import javax.annotation.Nullable;
  * A report category.
  */
 public interface DetailedReportCategory {
-
   /**
    * Sets a detail.
    *
@@ -42,6 +42,16 @@ public interface DetailedReportCategory {
    */
   @Nonnull
   DetailedReportCategory detail(@Nonnull final String key, @Nullable final Object value);
+
+  /**
+   * Sets a complex detail.
+   *
+   * @param key the key
+   * @param consumer the category consumer
+   * @return this category
+   */
+  @Nonnull
+  DetailedReportCategory complexDetail(@Nonnull final String key, @Nonnull final Consumer<DetailedReportCategory> consumer);
 
   /**
    * Sets a detail.
