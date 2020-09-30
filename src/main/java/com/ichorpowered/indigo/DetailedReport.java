@@ -1,7 +1,8 @@
 /*
- * This file is part of indigo, licensed under the MIT License.
+ * This file is part of Indigo, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2017 KyoriPowered
+ * Copyright (c) IchorPowered <http://ichorpowered.com>
+ * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,18 +11,18 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
-package net.kyori.indigo;
+package com.ichorpowered.indigo;
 
 import com.google.gson.JsonObject;
 
@@ -39,7 +40,7 @@ public interface DetailedReport {
    * @return the report
    */
   @Nonnull
-  static DetailedReport create(@Nonnull final String message) {
+  static DetailedReport create(final @Nonnull String message) {
     return new DetailedReportImpl(message, null);
   }
 
@@ -51,7 +52,7 @@ public interface DetailedReport {
    * @return the report
    */
   @Nonnull
-  static DetailedReport create(@Nonnull final String message, @Nullable final Throwable throwable) {
+  static DetailedReport create(final @Nonnull String message, @Nullable final Throwable throwable) {
     final DetailedReport report;
     if(throwable instanceof DetailedReportedException) {
       report = ((DetailedReportedException) throwable).report();
@@ -84,7 +85,7 @@ public interface DetailedReport {
    * @return the category
    */
   @Nonnull
-  DetailedReportCategory category(@Nonnull final String name);
+  DetailedReportCategory category(final @Nonnull String name);
 
   /**
    * Throws an {@link DetailedReportedException}.

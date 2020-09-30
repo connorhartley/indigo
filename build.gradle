@@ -2,19 +2,25 @@ plugins {
   id 'java'
   id 'maven'
   id 'signing'
-  id 'net.minecrell.licenser' version '0.3'
+  id 'net.minecrell.licenser' version '0.4.1'
 }
 
-group 'net.kyori'
+group 'com.ichorpowered'
 version '1.0.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 license {
-  header project.file('header.txt')
-  include '**/*.java'
-  newLine false
+  header = file("header.txt")
+  newLine = false
+  ext {
+    name = "Indigo"
+    organization = "IchorPowered"
+    url = "http://ichorpowered.com"
+  }
+
+  include("**/*.java", "**/*.groovy", "**/*.kt")
 }
 
 repositories {
@@ -25,7 +31,6 @@ repositories {
 dependencies {
   compile 'com.google.code.findbugs:jsr305:3.0.2'
   compile 'com.google.code.gson:gson:2.8.0'
-  testCompile 'junit:junit:4.12'
 }
 
 task javadocJar(type: Jar) {
@@ -50,7 +55,7 @@ signing {
 
 jar {
   manifest.attributes(
-    'Automatic-Module-Name': 'net.kyori.indigo'
+    'Automatic-Module-Name': 'com.ichorpowered.indigo'
   )
 }
 
@@ -73,11 +78,11 @@ if(project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassw
         pom.project {
           description 'An error report generator'
           name project.name
-          url 'https://github.com/KyoriPowered/indigo/'
+          url 'https://github.com/IchorPowered/indigo/'
 
           issueManagement {
             system 'GitHub Issues'
-            url 'https://github.com/KyoriPowered/indigo/issues'
+            url 'https://github.com/IchorPowered/indigo/issues'
           }
 
           licenses {
@@ -88,9 +93,9 @@ if(project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassw
           }
 
           scm {
-            connection 'scm:git@github.com:KyoriPowered/indigo.git'
-            developerConnection 'scm:git@github.com:KyoriPowered/indigo.git'
-            url 'https://github.com/KyoriPowered/indigo/'
+            connection 'scm:git@github.com:IchorPowered/indigo.git'
+            developerConnection 'scm:git@github.com:IchorPowered/indigo.git'
+            url 'https://github.com/IchorPowered/indigo/'
           }
         }
       }

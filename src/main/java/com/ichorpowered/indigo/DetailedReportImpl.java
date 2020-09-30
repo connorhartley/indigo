@@ -1,7 +1,8 @@
 /*
- * This file is part of indigo, licensed under the MIT License.
+ * This file is part of Indigo, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2017 KyoriPowered
+ * Copyright (c) IchorPowered <http://ichorpowered.com>
+ * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,18 +11,18 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
-package net.kyori.indigo;
+package com.ichorpowered.indigo;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -41,11 +42,11 @@ import javax.annotation.Nullable;
 
 final class DetailedReportImpl implements DetailedReport {
   private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-  private final String message;
-  @Nullable private final Throwable throwable;
   private final Map<String, DetailedReportCategoryImpl> categories = new LinkedHashMap<>();
+  private final String message;
+  private final @Nullable Throwable throwable;
 
-  DetailedReportImpl(@Nonnull final String message, @Nullable final Throwable throwable) {
+  DetailedReportImpl(final @Nonnull String message, final @Nullable Throwable throwable) {
     this.message = message;
     this.throwable = throwable;
   }
@@ -64,7 +65,7 @@ final class DetailedReportImpl implements DetailedReport {
 
   @Nonnull
   @Override
-  public DetailedReportCategory category(@Nonnull final String name) {
+  public DetailedReportCategory category(final @Nonnull String name) {
     return this.categories.computeIfAbsent(name, key -> new DetailedReportCategoryImpl(name));
   }
 
@@ -127,14 +128,14 @@ final class DetailedReportImpl implements DetailedReport {
 
     @Nonnull
     @Override
-    public DetailedReportCategory detail(@Nonnull final String key, @Nullable final Object value) {
+    public DetailedReportCategory detail(final @Nonnull String key, final @Nullable Object value) {
       this.entries.add(new NormalEntry(key, value));
       return this;
     }
 
     @Nonnull
     @Override
-    public DetailedReportCategory complexDetail(@Nonnull final String key, @Nonnull final Consumer<DetailedReportCategory> consumer) {
+    public DetailedReportCategory complexDetail(final @Nonnull String key, final @Nonnull Consumer<DetailedReportCategory> consumer) {
       this.entries.add(new ConsumerEntry(key, consumer));
       return this;
     }
@@ -177,7 +178,7 @@ final class DetailedReportImpl implements DetailedReport {
     private class NormalEntry extends Entry {
       private final Object value;
 
-      NormalEntry(final String key, @Nullable final Object value) {
+      NormalEntry(final String key, final @Nullable Object value) {
         super(key);
 
         // Get the string representation of the value now, as the object may change when actually outputting
@@ -199,7 +200,7 @@ final class DetailedReportImpl implements DetailedReport {
     private final class ConsumerEntry extends Entry {
       private final Consumer<DetailedReportCategory> consumer;
 
-      ConsumerEntry(final String key, @Nonnull final Consumer<DetailedReportCategory> consumer) {
+      ConsumerEntry(final String key, final @Nonnull Consumer<DetailedReportCategory> consumer) {
         super(key);
         this.consumer = consumer;
       }

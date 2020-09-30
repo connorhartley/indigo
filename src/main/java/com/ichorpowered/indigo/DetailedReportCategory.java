@@ -1,7 +1,8 @@
 /*
- * This file is part of indigo, licensed under the MIT License.
+ * This file is part of Indigo, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2017 KyoriPowered
+ * Copyright (c) IchorPowered <http://ichorpowered.com>
+ * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10,18 +11,18 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
-package net.kyori.indigo;
+package com.ichorpowered.indigo;
 
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
@@ -41,7 +42,7 @@ public interface DetailedReportCategory {
    * @return this category
    */
   @Nonnull
-  DetailedReportCategory detail(@Nonnull final String key, @Nullable final Object value);
+  DetailedReportCategory detail(final @Nonnull String key, final @Nullable Object value);
 
   /**
    * Sets a complex detail.
@@ -51,7 +52,7 @@ public interface DetailedReportCategory {
    * @return this category
    */
   @Nonnull
-  DetailedReportCategory complexDetail(@Nonnull final String key, @Nonnull final Consumer<DetailedReportCategory> consumer);
+  DetailedReportCategory complexDetail(final @Nonnull String key, final @Nonnull Consumer<DetailedReportCategory> consumer);
 
   /**
    * Sets a detail.
@@ -61,7 +62,7 @@ public interface DetailedReportCategory {
    * @return this category
    */
   @Nonnull
-  default DetailedReportCategory detail(@Nonnull final String key, @Nonnull final Callable<String> value) {
+  default DetailedReportCategory detail(final @Nonnull String key, final @Nonnull Callable<String> value) {
     try {
       return this.detail(key, value.call());
     } catch(final Throwable t) {
