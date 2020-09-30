@@ -1,3 +1,4 @@
-# Indigo
+Indigo
+======
 
-[![Build Status](https://travis-ci.org/IchorPowered/indigo.svg?branch=master)](https://travis-ci.org/IchorPowered/indigo)
+An error report generator.

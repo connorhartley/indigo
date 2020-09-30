@@ -1,12 +1,12 @@
 plugins {
-  id 'java'
-  id 'maven'
-  id 'signing'
+  id 'java-library'
+  id 'maven-publish'
   id 'net.minecrell.licenser' version '0.4.1'
 }
 
 group 'com.ichorpowered'
 version '1.0.0-SNAPSHOT'
+description 'An error report generator'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -33,71 +33,72 @@ dependencies {
   compile 'com.google.code.gson:gson:2.8.0'
 }
 
-task javadocJar(type: Jar) {
-  classifier 'javadoc'
-  from javadoc
-}
-
-task sourcesJar(type: Jar) {
-  classifier 'sources'
-  from sourceSets.main.allSource
-}
-
-artifacts {
-  archives javadocJar
-  archives sourcesJar
-}
-
-signing {
-  required { !project.version.endsWith('-SNAPSHOT') && gradle.taskGraph.hasTask(':uploadArchives') && project.hasProperty('signing.keyId') }
-  sign configurations.archives
-}
-
 jar {
   manifest.attributes(
     'Automatic-Module-Name': 'com.ichorpowered.indigo'
   )
 }
 
-if(project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')) {
-  uploadArchives {
-    enabled = System.getenv('TRAVIS') == null || project.version.endsWith('-SNAPSHOT')
+java {
+  withJavadocJar()
+  withSourcesJar()
+}
 
-    repositories {
-      mavenDeployer {
-        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+def ichorpoweredUsername = System.getenv("ICHORPOWERED_USERNAME")
+def ichorpoweredPassword = System.getenv("ICHORPOWERED_PASSWORD")
 
-        repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-          authentication(userName: sonatypeUsername, password: sonatypePassword)
+tasks.<PublishToMavenRepository>withType(PublishToMavenRepository.class).configureEach {
+  onlyIf {
+    (repository == publishing.repositories["GitHubPackages"]
+      || (ichorpoweredUsername != null && ichorpoweredPassword != null))
+  }
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+
+      pom {
+        name = project.name
+        url = 'https://github.com/ichorpowered/indigo/'
+        description = project.description
+
+        issueManagement {
+          system = 'GitHub Issues'
+          url = 'https://github.com/ichorpowered/indigo/issues'
         }
 
-        snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
-          authentication(userName: sonatypeUsername, password: sonatypePassword)
-        }
-
-        pom.project {
-          description 'An error report generator'
-          name project.name
-          url 'https://github.com/IchorPowered/indigo/'
-
-          issueManagement {
-            system 'GitHub Issues'
-            url 'https://github.com/IchorPowered/indigo/issues'
-          }
-
-          licenses {
-            license {
-              name 'MIT License'
-              url 'https://opensource.org/licenses/MIT'
-            }
-          }
-
-          scm {
-            connection 'scm:git@github.com:IchorPowered/indigo.git'
-            developerConnection 'scm:git@github.com:IchorPowered/indigo.git'
-            url 'https://github.com/IchorPowered/indigo/'
+        licenses {
+          license {
+            name = "MIT"
+            url = "https://opensource.org/licenses/MIT"
           }
         }
+
+        scm {
+          connection = 'scm:git@github.com:ichorpowered/indigo.git'
+          developerConnection = 'scm:git@github.com:ichorpowered/indigo.git'
+          url = 'https://github.com/ichorpowered/indigo/'
+        }
+      }
+    }
+  }
+  repositories {
+    maven {
+      name = "GitHubPackages"
+      url = "https://maven.pkg.github.com/ichorpowered/indigo"
+      credentials {
+        username = project.findProperty("gpr.user") as String ?: System.getenv("GITHUB_USERNAME")
+        password = project.findProperty("gpr.key") as String ?: System.getenv("GITHUB_TOKEN")
+      }
+    }
+    maven {
+      name = "IchorpoweredRepo"
+      url = "https://repo.ichorpowered.com/repository/maven-ichorpowered"
+      credentials {
+        username = ichorpoweredUsername
+        password = ichorpoweredPassword
       }
     }
   }
