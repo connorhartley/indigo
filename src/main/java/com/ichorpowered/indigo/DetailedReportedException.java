@@ -24,19 +24,16 @@
  */
 package com.ichorpowered.indigo;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * An exception thrown with a detailed report.
  */
 public class DetailedReportedException extends RuntimeException {
-  /**
-   * The report.
-   */
   private final DetailedReport report;
 
-  public DetailedReportedException(final @Nonnull DetailedReport report) {
+  public DetailedReportedException(final @NonNull DetailedReport report) {
     this.report = report;
   }
 
@@ -45,20 +42,17 @@ public class DetailedReportedException extends RuntimeException {
    *
    * @return the report
    */
-  @Nonnull
-  public DetailedReport report() {
+  public @NonNull DetailedReport report() {
     return this.report;
   }
 
-  @Nonnull
   @Override
-  public String getMessage() {
+  public @NonNull String getMessage() {
     return this.report.message();
   }
 
-  @Nullable
   @Override
-  public Throwable getCause() {
+  public @Nullable Throwable getCause() {
     return this.report.throwable();
   }
 }

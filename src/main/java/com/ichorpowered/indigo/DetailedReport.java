@@ -25,9 +25,8 @@
 package com.ichorpowered.indigo;
 
 import com.google.gson.JsonObject;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * A friendly report.
@@ -39,8 +38,7 @@ public interface DetailedReport {
    * @param message the message
    * @return the report
    */
-  @Nonnull
-  static DetailedReport create(final @Nonnull String message) {
+  static @NonNull DetailedReport create(final @NonNull String message) {
     return new DetailedReportImpl(message, null);
   }
 
@@ -51,8 +49,7 @@ public interface DetailedReport {
    * @param throwable the throwable
    * @return the report
    */
-  @Nonnull
-  static DetailedReport create(final @Nonnull String message, @Nullable final Throwable throwable) {
+  static @NonNull DetailedReport create(final @NonNull String message, final @Nullable Throwable throwable) {
     final DetailedReport report;
     if(throwable instanceof DetailedReportedException) {
       report = ((DetailedReportedException) throwable).report();
@@ -67,16 +64,14 @@ public interface DetailedReport {
    *
    * @return the message
    */
-  @Nonnull
-  String message();
+  @NonNull String message();
 
   /**
    * Gets the throwable.
    *
    * @return the throwable
    */
-  @Nullable
-  Throwable throwable();
+  @Nullable Throwable throwable();
 
   /**
    * Gets a category by name.
@@ -84,8 +79,7 @@ public interface DetailedReport {
    * @param name the name
    * @return the category
    */
-  @Nonnull
-  DetailedReportCategory category(final @Nonnull String name);
+  @NonNull DetailedReportCategory category(final @NonNull String name);
 
   /**
    * Throws an {@link DetailedReportedException}.
@@ -97,15 +91,13 @@ public interface DetailedReport {
    *
    * @return the json object
    */
-  @Nonnull
-  JsonObject toJson();
+  @NonNull JsonObject toJson();
 
   /**
    * Gets a string representation of this report.
    *
    * @return the string
    */
-  @Nonnull
   @Override
-  String toString();
+  @NonNull String toString();
 }

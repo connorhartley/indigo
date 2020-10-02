@@ -24,11 +24,11 @@
  */
 package com.ichorpowered.indigo;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * A report category.
@@ -41,8 +41,7 @@ public interface DetailedReportCategory {
    * @param value the value
    * @return this category
    */
-  @Nonnull
-  DetailedReportCategory detail(final @Nonnull String key, final @Nullable Object value);
+  @NonNull DetailedReportCategory detail(final @NonNull String key, final @Nullable Object value);
 
   /**
    * Sets a complex detail.
@@ -51,8 +50,7 @@ public interface DetailedReportCategory {
    * @param consumer the category consumer
    * @return this category
    */
-  @Nonnull
-  DetailedReportCategory complexDetail(final @Nonnull String key, final @Nonnull Consumer<DetailedReportCategory> consumer);
+  @NonNull DetailedReportCategory complexDetail(final @NonNull String key, final @NonNull Consumer<DetailedReportCategory> consumer);
 
   /**
    * Sets a detail.
@@ -61,8 +59,7 @@ public interface DetailedReportCategory {
    * @param value the value supplier
    * @return this category
    */
-  @Nonnull
-  default DetailedReportCategory detail(final @Nonnull String key, final @Nonnull Callable<String> value) {
+  default @NonNull DetailedReportCategory detail(final @NonNull String key, final @NonNull Callable<String> value) {
     try {
       return this.detail(key, value.call());
     } catch(final Throwable t) {
@@ -75,6 +72,5 @@ public interface DetailedReportCategory {
    *
    * @return the report
    */
-  @Nonnull
-  DetailedReport then();
+  @NonNull DetailedReport then();
 }

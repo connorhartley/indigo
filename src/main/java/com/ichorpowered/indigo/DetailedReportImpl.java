@@ -29,6 +29,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -37,35 +39,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-final class DetailedReportImpl implements DetailedReport {
+/* package */ final class DetailedReportImpl implements DetailedReport {
   private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
   private final Map<String, DetailedReportCategoryImpl> categories = new LinkedHashMap<>();
   private final String message;
   private final @Nullable Throwable throwable;
 
-  DetailedReportImpl(final @Nonnull String message, final @Nullable Throwable throwable) {
+  /* package */ DetailedReportImpl(final @NonNull String message, final @Nullable Throwable throwable) {
     this.message = message;
     this.throwable = throwable;
   }
 
-  @Nonnull
   @Override
-  public String message() {
+  public @NonNull String message() {
     return this.message;
   }
 
-  @Nullable
   @Override
-  public Throwable throwable() {
+  public @Nullable Throwable throwable() {
     return this.throwable;
   }
 
-  @Nonnull
   @Override
-  public DetailedReportCategory category(final @Nonnull String name) {
+  public @NonNull DetailedReportCategory category(final @NonNull String name) {
     return this.categories.computeIfAbsent(name, key -> new DetailedReportCategoryImpl(name));
   }
 
@@ -74,9 +70,8 @@ final class DetailedReportImpl implements DetailedReport {
     throw new DetailedReportedException(this);
   }
 
-  @Nonnull
   @Override
-  public JsonObject toJson() {
+  public @NonNull JsonObject toJson() {
     final JsonObject object = new JsonObject();
     object.addProperty("instant", Instant.now().toString());
     object.addProperty("message", this.message);
@@ -89,9 +84,8 @@ final class DetailedReportImpl implements DetailedReport {
     return object;
   }
 
-  @Nonnull
   @Override
-  public String toString() {
+  public @NonNull String toString() {
     final JsonObject object = this.toJson();
     return GSON.toJson(object);
   }
@@ -122,30 +116,28 @@ final class DetailedReportImpl implements DetailedReport {
     private final String name;
     private final List<Entry> entries = new ArrayList<>();
 
-    DetailedReportCategoryImpl(final String name) {
+    /* package */ DetailedReportCategoryImpl(final String name) {
       this.name = name;
     }
 
-    @Nonnull
     @Override
-    public DetailedReportCategory detail(final @Nonnull String key, final @Nullable Object value) {
+    public @NonNull DetailedReportCategory detail(final @NonNull String key, final @Nullable Object value) {
       this.entries.add(new NormalEntry(key, value));
       return this;
     }
 
-    @Nonnull
     @Override
-    public DetailedReportCategory complexDetail(final @Nonnull String key, final @Nonnull Consumer<DetailedReportCategory> consumer) {
+    public @NonNull DetailedReportCategory complexDetail(final @NonNull String key, final @NonNull Consumer<DetailedReportCategory> consumer) {
       this.entries.add(new ConsumerEntry(key, consumer));
       return this;
     }
 
-    @Nonnull
     @Override
-    public DetailedReport then() {
+    public @NonNull DetailedReport then() {
       return DetailedReportImpl.this;
     }
 
+    @SuppressWarnings("unchecked")
     JsonObject write() {
       final JsonObject object = new JsonObject();
       for(final Entry entry : this.entries) {
@@ -168,7 +160,7 @@ final class DetailedReportImpl implements DetailedReport {
     private abstract class Entry {
       private final String key;
 
-      Entry(final String key) {
+      /* package */ Entry(final String key) {
         this.key = key;
       }
 
@@ -178,7 +170,7 @@ final class DetailedReportImpl implements DetailedReport {
     private class NormalEntry extends Entry {
       private final Object value;
 
-      NormalEntry(final String key, final @Nullable Object value) {
+      /* package */ NormalEntry(final String key, final @Nullable Object value) {
         super(key);
 
         // Get the string representation of the value now, as the object may change when actually outputting
@@ -200,7 +192,7 @@ final class DetailedReportImpl implements DetailedReport {
     private final class ConsumerEntry extends Entry {
       private final Consumer<DetailedReportCategory> consumer;
 
-      ConsumerEntry(final String key, final @Nonnull Consumer<DetailedReportCategory> consumer) {
+      /* package */ ConsumerEntry(final String key, final @NonNull Consumer<DetailedReportCategory> consumer) {
         super(key);
         this.consumer = consumer;
       }
