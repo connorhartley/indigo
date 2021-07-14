@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-  api "org.checkerframework:checker-qual:3.11.0"
+  api "org.checkerframework:checker-qual:3.16.0"
   api "com.google.code.gson:gson:2.8.0"
 }
 
