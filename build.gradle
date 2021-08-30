@@ -14,11 +14,6 @@ targetCompatibility = 1.8
 license {
   header = file("header.txt")
   newLine = false
-  ext {
-    name = "Indigo"
-    organization = "IchorPowered"
-    url = "http://ichorpowered.com"
-  }
 
   include("**/*.java", "**/*.groovy", "**/*.kt")
 }
